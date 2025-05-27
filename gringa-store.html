@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Gringa Store</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background: #fff;
+      color: #222;
+      padding: 20px;
+      text-align: center;
+      border-bottom: 1px solid #ccc;
+    }
+
+    header img {
+      max-width: 200px;
+      height: auto;
+    }
+
+    .products {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .product {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 15px;
+      width: 200px;
+      text-align: center;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .product img {
+      width: 100%;
+      height: auto;
+    }
+
+    .product button {
+      background-color: #e91e63;
+      color: white;
+      border: none;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .product button:hover {
+      background-color: #c2185b;
+    }
+
+    #cart {
+      background: #fff;
+      padding: 20px;
+      margin: 20px;
+      border-radius: 10px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    #pay-info {
+      background-color: #f8f8f8;
+      padding: 15px;
+      border: 1px dashed #999;
+      margin-top: 15px;
+      border-radius: 5px;
+      text-align: left;
+    }
+
+    #pay-info strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    #pay-button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+
+    #pay-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <img src="https://raw.githubusercontent.com/tu-usuario/gringa-store/main/logo.jpeg" alt="Gringa Store Logo">
+  </header>
+
+  <div class="products" id="product-list">
+    <!-- Productos generados dinámicamente -->
+  </div>
+
+  <div id="cart">
+    <h2>Carrito</h2>
+    <ul id="cart-items"></ul>
+    <p>Total: $<span id="total">0</span></p>
+    <button id="pay-button" onclick="mostrarDatosPago()">Pagar</button>
+    <div id="pay-info" style="display:none;">
+      <strong>Datos para depósito:</strong>
+      <p>Banco: BBVA</p>
+      <p>Cuenta: 1234567890</p>
+      <p>CLABE: 012345678901234567</p>
+      <p>Titular: Gringa Store</p>
+      <p><strong>Envía tu comprobante al WhatsApp: <a href="https://wa.me/528446928700" target="_blank">844 692 8700</a></strong></p>
+    </div>
+  </div>
+
+  <script>
+    const productos = [
+      { id: 1, nombre: "Camiseta", precio: 10, imagen: "https://via.placeholder.com/150" },
+      { id: 2, nombre: "Pantalón", precio: 20, imagen: "https://via.placeholder.com/150" },
+      { id: 3, nombre: "Zapatos", precio: 30, imagen: "https://via.placeholder.com/150" },
+      { id: 4, nombre: "Gorra", precio: 5, imagen: "https://via.placeholder.com/150" },
+      { id: 5, nombre: "Mochila", precio: 25, imagen: "https://via.placeholder.com/150" }
+    ];
+
+    let carrito = [];
+
+    function renderProductos() {
+      const contenedor = document.getElementById('product-list');
+      productos.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'product';
+        div.innerHTML = `
+          <img src="${p.imagen}" alt="${p.nombre}">
+          <h3>${p.nombre}</h3>
+          <p>$${p.precio}</p>
+          <button onclick="agregarAlCarrito(${p.id})">Agregar al carrito</button>
+        `;
+        contenedor.appendChild(div);
+      });
+    }
+
+    function agregarAlCarrito(id) {
+      const producto = productos.find(p => p.id === id);
+      carrito.push(producto);
+      actualizarCarrito();
+    }
+
+    function actualizarCarrito() {
+      const lista = document.getElementById('cart-items');
+      lista.innerHTML = '';
+      let total = 0;
+      carrito.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = `${item.nombre} - $${item.precio}`;
+        lista.appendChild(li);
+        total += item.precio;
+      });
+      document.getElementById('total').textContent = total;
+    }
+
+    function mostrarDatosPago() {
+      if (carrito.length === 0) {
+        alert("El carrito está vacío");
+        return;
+      }
+      document.getElementById('pay-info').style.display = 'block';
+      carrito = [];
+      actualizarCarrito();
+    }
+
+    renderProductos();
+  </script>
+
+</body>
+</html>
